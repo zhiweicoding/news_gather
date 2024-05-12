@@ -33,4 +33,4 @@ jobs:
 
     - name: Deploy using docker-compose on remote server
       run: |
-        ssh -o StrictHostKeyChecking=no root@43.153.106.25 "cd /home/news_gather/etc && docker-compose pull && docker-compose -f start.yml up -d"
+        ssh -o StrictHostKeyChecking=no root@43.153.106.25 "cd /home/news_gather/etc && docker pull loveqianqian/news_gather:main && docker-compose -f start.yml up -d"
