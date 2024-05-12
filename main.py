@@ -1,20 +1,18 @@
 from fastapi import FastAPI
-import os
+
 from dotenv import load_dotenv
+from routers import twitter, upload
 
 # Load environment variables
 load_dotenv()
 
 app = FastAPI()
 
+# 包含具体的路由器
+app.include_router(twitter.router, prefix="/twitter", tags=["twitter"])
+app.include_router(upload.router, prefix="/upload", tags=["upload"])
+
 
 @app.get("/")
-async def root():
-    secret_id = os.getenv("COS_SECRET_ID", "未设置")
-    secret_key = os.getenv("COS_SECRET_KEY", "未设置")
-    return {"message": "Hello World","COS_SECRET_ID": secret_id, "COS_SECRET_KEY": secret_key}
-
-
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
+async def health_check():
+    return {"message": "hello"}
