@@ -12,6 +12,7 @@ logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 # 1. 设置用户属性, 包括 secret_id, secret_key, region 等。Appid 已在 CosConfig 中移除，请在参数 Bucket 中带上 Appid。Bucket 由
 # BucketName-Appid 组成
 secret_id = os.environ['COS_SECRET_ID']
+
 secret_key = os.environ['COS_SECRET_KEY']   # 用户的 SecretKey，建议使用子账号密钥，授权遵循最小权限指引，降低使用风险。子账号密钥获取可参见 https://cloud.tencent.com/document/product/598/37140
 region = None
                            # COS 支持的所有 region 列表参见 https://cloud.tencent.com/document/product/436/6224
