@@ -1,35 +1,18 @@
 # -*- coding=utf-8
 import json
-
-from qcloud_cos import CosConfig
-from qcloud_cos import CosS3Client
-from qcloud_cos.cos_exception import CosClientError, CosServiceError
-import sys
 import os
-import logging
+
 from fastapi import APIRouter
 from entity.base_response import BaseResponse
 import uuid
 import requests
 import tempfile
 from entity.base_receive import UploadReceive
+from storage import storage_factory
 
 router = APIRouter()
 
-# 正常情况日志级别使用 INFO，需要定位时可以修改为 DEBUG，此时 SDK 会打印和服务端的通信信息
-logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
-
-secret_id = os.environ['COS_SECRET_ID']
-secret_key = os.environ['COS_SECRET_KEY']
-region = 'ap-guangzhou'
-token = None
-scheme = 'https'
-
-domain = os.environ['COS_ENDPOINT']
-bucket_name = os.environ['COS_BUCKET']
-cdn_url = os.environ['COS_CDN_URL']
-config = CosConfig(Region=region, SecretId=secret_id, SecretKey=secret_key, Token=token, Scheme=scheme)
-client = CosS3Client(config)
+cdn_url = os.environ['CDN_URL']
 
 
 @router.post("/")
@@ -37,8 +20,10 @@ async def init(upload_entity: UploadReceive):
     temp_path: str = download_file_to_temp(upload_entity.download_url, upload_entity.suffix)
     uuid_str: str = str(uuid.uuid1())
     print(f"temp_path: {temp_path}")
-    upload_response = upload_file(temp_path, uuid_str + '.' + upload_entity.suffix,
-                                  meta_data=dict(cell_id=upload_entity.cell_id))
+    storage_type = os.environ.get('STORAGE_TYPE', 'default')
+    storage = storage_factory.get_storage(storage_type)
+    upload_response = storage.upload(temp_path, uuid_str + '.' + upload_entity.suffix,
+                                     meta_data=dict(cell_id=upload_entity.cell_id))
 
     print(f"upload_response:{json.dumps(upload_response)}")
 
@@ -62,22 +47,4 @@ def download_file_to_temp(url: str, suffix: str):
             return tmp_file.name
     else:
         print(f"Failed to download: status code {response.status_code}")
-        return None
-
-
-def upload_file(file_path: str, key: str, meta_data: dict = None):
-    try:
-        response = client.upload_file(
-            Bucket=bucket_name,
-            Key=key,
-            LocalFilePath=file_path,
-            Metadata=meta_data
-        )
-        return response
-    except CosServiceError as e:
-        print(e.get_error_code())
-        print(e.get_error_msg())
-        print(e.get_resource_location())
-        return None
-    except CosClientError as e:
         return None

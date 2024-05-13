@@ -30,7 +30,8 @@ services:
       - COS_SECRET_KEY={{your secret key}}
       - COS_ENDPOINT={{your endpoint}}
       - COS_BUCKET={{your bucket name}}
-      - COS_CDN_URL={{your cdn url}}
+      - CDN_URL={{your cdn url}}
+      - COS_REGION={{your region}}
 networks:
   newsgather-network:
     driver: bridge
