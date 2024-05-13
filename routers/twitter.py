@@ -4,7 +4,7 @@ from entity.base_response import BaseResponse
 router = APIRouter()
 
 
-@router.post("/receive/list")
+@router.post("/receive/list", response_model=BaseResponse)
 async def receive_list(request: Request):
     # Parse the incoming JSON data
     data = await request.json()

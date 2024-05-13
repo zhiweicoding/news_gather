@@ -15,7 +15,7 @@ router = APIRouter()
 cdn_url = os.environ['CDN_URL']
 
 
-@router.post("/")
+@router.post("/", response_model=BaseResponse)
 async def init(upload_entity: UploadReceive):
     temp_path: str = download_file_to_temp(upload_entity.download_url, upload_entity.suffix)
     uuid_str: str = str(uuid.uuid1())
