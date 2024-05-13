@@ -8,7 +8,7 @@ from qcloud_cos import CosConfig
 from qcloud_cos import CosS3Client
 from qcloud_cos.cos_exception import CosClientError, CosServiceError
 
-from storage import self_storage
+from app.storage import self_storage
 
 
 class TencentStorage(self_storage.Storage):

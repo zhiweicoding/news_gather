@@ -1,4 +1,4 @@
-from storage.tencent_storage import TencentStorage
+from app.storage.tencent_storage import TencentStorage
 
 
 def get_storage(storage_type):

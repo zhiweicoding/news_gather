@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request
-from entity.base_response import BaseResponse
+from app.entity.base_response import BaseResponse
 
 router = APIRouter()
 

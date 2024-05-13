@@ -3,12 +3,12 @@ import json
 import os
 
 from fastapi import APIRouter
-from entity.base_response import BaseResponse
+from app.entity.base_response import BaseResponse
 import uuid
 import requests
 import tempfile
-from entity.base_receive import UploadReceive
-from storage import storage_factory
+from app.entity.base_receive import UploadReceive
+from app.storage import storage_factory
 
 router = APIRouter()
 
